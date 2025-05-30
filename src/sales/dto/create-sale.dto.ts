@@ -31,5 +31,5 @@ export class CreateSaleDto {
   @ApiProperty({ example: 1, description: "Molning ID raqami" })
   @IsNumber()
   @IsNotEmpty()
-  cattleId: number;
+  cattle_id: number;
 }

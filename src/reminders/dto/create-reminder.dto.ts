@@ -12,7 +12,7 @@ export class CreateReminderDto {
   @ApiProperty({ example: 1, description: "Molning ID raqami" })
   @IsInt()
   @IsNotEmpty()
-  cattleId: number;
+  cattle_id: number;
 
   @ApiProperty({ example: "Emlash vaqti keldi", description: "Eslatma matni" })
   @IsString()

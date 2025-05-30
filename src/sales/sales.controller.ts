@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SalesService } from './sales.service';
-import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { SalesService } from "./sales.service";
+import { CreateSaleDto } from "./dto/create-sale.dto";
+import { UpdateSaleDto } from "./dto/update-sale.dto";
 
-@Controller('sales')
+@ApiTags("Sales")
+@Controller("sales")
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Post()
+  @ApiOperation({ summary: "Yangi sotuv qo‘shish" })
   create(@Body() createSaleDto: CreateSaleDto) {
     return this.salesService.create(createSaleDto);
   }
 
   @Get()
+  @ApiOperation({ summary: "Barcha sotuvlarni olish" })
   findAll() {
     return this.salesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  @ApiOperation({ summary: "ID orqali sotuvni olish" })
+  findOne(@Param("id") id: string) {
     return this.salesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
+  @Patch(":id")
+  @ApiOperation({ summary: "Sotuvni yangilash" })
+  update(@Param("id") id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(+id, updateSaleDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(":id")
+  @ApiOperation({ summary: "Sotuvni o‘chirish" })
+  remove(@Param("id") id: string) {
     return this.salesService.remove(+id);
   }
 }

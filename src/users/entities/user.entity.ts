@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Notification } from "../../notifications/entities/notification.entity";
-
+import { v4 as uuidv4 } from "uuid";
 export enum UserRole {
   ISHCHI = "ishchi",
   VIT = "vit",
@@ -28,7 +28,7 @@ export class User {
     example: "ali@example.com",
     description: "Foydalanuvchining email manzili",
   })
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @ApiProperty({
@@ -60,6 +60,18 @@ export class User {
   })
   @Column({ default: false })
   is_active: boolean;
+
+  @ApiProperty({
+    example: "random-uuid-activation-link",
+    description: "Foydalanuvchini email orqali aktivatsiya qilish uchun link",
+    default: null,
+  })
+  @Column({
+    type: "uuid",
+    default: () => "uuid_generate_v4()",
+    nullable: false,
+  })
+  activation_link: string;
 
   @ApiProperty({
     example: UserRole.ISHCHI,

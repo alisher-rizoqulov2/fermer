@@ -11,7 +11,7 @@ export class CreateExpenseDto {
   @ApiProperty({ example: 1, description: "Molning ID raqami" })
   @IsInt()
   @IsNotEmpty()
-  cattleId: number;
+  cattle_id: number;
 
   @ApiProperty({ example: "Veterinary", description: "Xarajat turi" })
   @IsString()

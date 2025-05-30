@@ -10,7 +10,7 @@ import { JwtService } from "@nestjs/jwt";
 import { AdminModule } from "../admin/admin.module";
 import { Admin } from "../admin/entities/admin.entity";
 import * as bcrypt from "bcrypt";
-import { User } from "../users/scheam/user.entity";
+import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 
 @Injectable()
@@ -48,6 +48,7 @@ export class AuthService {
       id: user.id,
       is_active: user.is_active,
       email: user.email,
+      role: user.role,
     };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -79,7 +80,7 @@ export class AuthService {
     const tokens = await this.generateTokens(admin);
     res.cookie("refresh_token", tokens.refreshToken, {
       httpOnly: true,
-      maxAge: Number(process.env.COOCIE_TIME),
+      maxAge: Number(process.env.COOKIE_TIME),
     });
     const hashed_refresh_token = await bcrypt.hash(tokens.refreshToken, 7);
     admin.hashed_refresh_token = hashed_refresh_token;
@@ -110,7 +111,6 @@ export class AuthService {
       throw new BadRequestException("Bunday Tokenli shaxs topilmadi");
     }
 
-    // Entity emas deb hisoblab, .update ishlatamiz
     await this.adminService.updateToken(user.id, {
       hashed_refresh_token: "",
     });
@@ -143,7 +143,7 @@ export class AuthService {
       });
       res.cookie("refresh_token", tokens.refreshToken, {
         httpOnly: true,
-        maxAge: Number(1296000000),
+        maxAge: Number(process.env.COOKIE_TIME),
       });
 
       return res.send({
@@ -154,6 +154,7 @@ export class AuthService {
       throw new UnauthorizedException("Tokenni yangilashda xatolik yuz berdi");
     }
   }
+  //====================================User==========================
 
   async loginUser(loginDto: LoginDto, res: Response) {
     const user = await this.usersService.findByEmail(loginDto.email);
@@ -176,6 +177,81 @@ export class AuthService {
       message: "Xush kelibsiz",
       userId: user.id,
       accessToken: tokens.accessToken,
+    };
+  }
+
+  async signOutUser(req: Request, res: Response) {
+    const refresh_token = req.cookies?.refresh_token;
+    if (!refresh_token) {
+      throw new UnauthorizedException("Ro'yxatdan o'tilmagan");
+    }
+    const user = await this.jwtService.verifyAsync(refresh_token, {
+      secret: process.env.REFRESH_TOKEN_KEY,
+    });
+    if (!user) {
+      throw new BadRequestException("Token topilmadi");
+    }
+    const userData = await this.usersService.findOne(user.id);
+    if (!userData) {
+      throw new BadRequestException("Bunday Tokenli shaxs topilmadi");
+    }
+    await this.usersService.updateToken(user.id, {
+      hashed_refresh_token: "",
+    });
+    res.clearCookie("refresh_token");
+
+    return {
+      success: true,
+      message: "Signed out successfully",
+    };
+  }
+  async refreshTokenUser(refresh_token: string, res: Response) {
+    try {
+      const user = await this.jwtService.verifyAsync(refresh_token, {
+        secret: process.env.REFRESH_TOKEN_KEY,
+      });
+      const userdata = await this.usersService.findOne(user.id);
+
+      if (!userdata) {
+        throw new BadRequestException("Bunday tokenli foydalanuvchi topilmadi");
+      }
+      const tokens = await this.generateTokensUser(userdata);
+
+      const newToken = (userdata.hashed_refresh_token = await bcrypt.hash(
+        tokens.refreshToken,
+        7
+      ));
+      await this.usersService.updateToken(userdata.id, {
+        hashed_refresh_token: newToken,
+      });
+      res.cookie("refresh_token", tokens.refreshToken, {
+        httpOnly: true,
+        maxAge: Number(process.env.COOKIE_TIME),
+      });
+
+      return res.send({
+        message: "Tokenlar yangilandi",
+        accessToken: tokens.accessToken,
+      });
+    } catch (error) {
+      throw new UnauthorizedException("Tokenni yangilashda xatolik yuz berdi");
+    }
+  }
+
+  async activatePatient(link: string) {
+    if (!link) {
+      throw new BadRequestException({ message: "Activation link not found" });
+    }
+
+    const updatedUser = await this.usersService.activateUserByLink(link);
+
+    if (!updatedUser.is_active) {
+      throw new BadRequestException({ message: "User already activated" });
+    }
+    
+    return {
+      message: "User Activated Successfully",
+      is_active: updatedUser.is_active,
     };
   }
 }

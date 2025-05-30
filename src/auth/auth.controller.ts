@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
   Req,
   Res,
@@ -17,11 +18,20 @@ import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
 import { Request, Response } from "express";
 import { CookieGetter } from "../common/decorators/cookie-getter.decorator";
+import { UsersService } from "../users/users.service";
 
 @ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+  ) {}
+
+  @Get("activate/:link")
+  activateUser(@Param("link") link: string) {
+    console.log(link);
+    return this.authService.activatePatient(link);  
+  }
 
   @Post("login")
   @HttpCode(200)
@@ -54,7 +64,7 @@ export class AuthController {
 
   @Get("refresh-token")
   @ApiOperation({ summary: "Refresh token orqali access token yangilash" })
-  @ApiCookieAuth() 
+  @ApiCookieAuth()
   @ApiResponse({ status: 200, description: "Yangi access token qaytarildi" })
   @ApiResponse({
     status: 401,
@@ -66,6 +76,7 @@ export class AuthController {
   ) {
     return this.authService.refreshTokenAdmin(refreshToken, res);
   }
+  //====================================User==========================
 
   @Post("login_user")
   @HttpCode(200)
@@ -74,6 +85,33 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     return this.authService.loginUser(LoginDto, res);
+  }
+  @Get("log-Out-User")
+  @HttpCode(200)
+  @ApiOperation({ summary: "Admin logout (chiqish)" })
+  @ApiResponse({
+    status: 200,
+    description: "Muvaffaqiyatli chiqildi, cookie tozalandi",
+  })
+  async signOutUser(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    return this.authService.signOutUser(request, response);
+  }
+  @Get("refresh-token-user")
+  @ApiOperation({ summary: "Refresh token orqali access token yangilash" })
+  @ApiCookieAuth()
+  @ApiResponse({ status: 200, description: "Yangi access token qaytarildi" })
+  @ApiResponse({
+    status: 401,
+    description: "Refresh token eskirgan yoki notogri",
+  })
+  async refreshTokenUser(
+    @CookieGetter("refresh_token") refreshToken: string,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    return this.authService.refreshTokenUser(refreshToken, res);
   }
 }
 

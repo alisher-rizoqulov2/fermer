@@ -50,11 +50,6 @@ export class CattleProfitLossService {
     }
 
     const { cattle_id, ...rest } = updateCattleProfitLossDto;
-
-    if (!cattle_id || isNaN(Number(cattle_id))) {
-      throw new BadRequestException("cattle_id noto‘g‘ri yoki yo‘q");
-    }
-
     const cattle = await this.cattleService.findOne(Number(cattle_id));
     if (!cattle) {
       throw new BadRequestException("Yangilamoqchi bo'lgan mol mavjud emas");
@@ -67,7 +62,13 @@ export class CattleProfitLossService {
     return this.cattleProfitLossRepo.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cattleProfitLoss`;
+  async remove(id: number) {
+    const cattlefeeding = await this.cattleProfitLossRepo.findOneBy({ id });
+    if (!cattlefeeding) {
+      throw new NotFoundException("Bunaqa Idli cattleFeeding topilmadi");
+    }
+    await this.cattleProfitLossRepo.delete(id);
+
+    return { message: `Cattle with id ${id} has been removed` };
   }
 }

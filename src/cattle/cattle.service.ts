@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateCattleDto } from "./dto/create-cattle.dto";
 import { UpdateCattleDto } from "./dto/update-cattle.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -11,6 +11,13 @@ export class CattleService {
     @InjectRepository(Cattle) private readonly cattleRepo: Repository<Cattle>
   ) {}
   async create(createCattleDto: CreateCattleDto) {
+    const { tag_number } = createCattleDto;
+
+    const existing = await this.cattleRepo.findOne({ where: { tag_number } });
+    if (existing) {
+      throw new BadRequestException(`Tag number ${tag_number} already exists.`);
+    }
+
     const new_cattle = this.cattleRepo.create(createCattleDto);
     return await this.cattleRepo.save(new_cattle);
   }
