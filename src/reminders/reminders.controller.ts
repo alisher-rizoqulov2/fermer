@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
 import { RemindersService } from "./reminders.service";
 import { CreateReminderDto } from "./dto/create-reminder.dto";
 import { UpdateReminderDto } from "./dto/update-reminder.dto";
+import { authGuard } from "../common/guard/auth.guard";
 
 @ApiTags("Reminders")
 @Controller("reminders")
@@ -18,24 +20,28 @@ export class RemindersController {
   constructor(private readonly remindersService: RemindersService) {}
 
   @Post()
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi eslatma yaratish" })
   create(@Body() createReminderDto: CreateReminderDto) {
     return this.remindersService.create(createReminderDto);
   }
 
   @Get()
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha eslatmalarni olish" })
   findAll() {
     return this.remindersService.findAll();
   }
 
   @Get(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali eslatmani olish" })
   findOne(@Param("id") id: string) {
     return this.remindersService.findOne(+id);
   }
 
   @Patch(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Eslatmani yangilash" })
   update(
     @Param("id") id: string,
@@ -45,6 +51,7 @@ export class RemindersController {
   }
 
   @Delete(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Eslatmani o‘chirish" })
   remove(@Param("id") id: string) {
     return this.remindersService.remove(+id);

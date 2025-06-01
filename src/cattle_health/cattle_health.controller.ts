@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
 import { CattleHealthService } from "./cattle_health.service";
 import { CreateCattleHealthDto } from "./dto/create-cattle_health.dto";
 import { UpdateCattleHealthDto } from "./dto/update-cattle_health.dto";
 import { CattleHealth } from "./entities/cattle_health.entity";
+import { authGuard } from "../common/guard/auth.guard";
 
 @ApiTags("cattle-health")
 @Controller("cattle-health")
@@ -19,6 +21,7 @@ export class CattleHealthController {
   constructor(private readonly cattleHealthService: CattleHealthService) {}
 
   @Post()
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Create a new cattle health record" })
   @ApiResponse({
     status: 201,
@@ -30,6 +33,7 @@ export class CattleHealthController {
   }
 
   @Get()
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Get all cattle health records" })
   @ApiResponse({
     status: 200,
@@ -41,6 +45,7 @@ export class CattleHealthController {
   }
 
   @Get(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Get a cattle health record by ID" })
   @ApiParam({
     name: "id",
@@ -58,6 +63,7 @@ export class CattleHealthController {
   }
 
   @Patch(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Update a cattle health record by ID" })
   @ApiParam({
     name: "id",
@@ -78,6 +84,7 @@ export class CattleHealthController {
   }
 
   @Delete(":id")
+  @UseGuards(authGuard)
   @ApiOperation({ summary: "Delete a cattle health record by ID" })
   @ApiParam({
     name: "id",

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./entities/admin.entity";
@@ -8,14 +8,16 @@ import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AdminService {
+  private readonly logger = new Logger(AdminService.name);
   constructor(
     @InjectRepository(Admin) private readonly adminRepo: Repository<Admin>
   ) {}
   async create(createAdminDto: CreateAdminDto) {
     const { email, new_password, confirim_password } = createAdminDto;
     if (new_password !== confirim_password) {
-      console.log(new_password);
-      console.log(confirim_password);
+      this.logger.warn(
+        `Parollar mos emas: new_password=${new_password}, confirim_password=${confirim_password}`
+      );
       throw new BadRequestException("Parollar mos emas");
     }
     const existingAdmin = await this.adminRepo.findOne({ where: { email } });
