@@ -15,7 +15,7 @@ export class selfguard implements CanActivate {
    
     if (req.user.is_creator) {
       return true;
-    } else if (req.user.id == req.params.id) {
+    } else if (req.user.is_creator==false && req.user.id == req.params.id) {
       return true
     } else {
       throw new ForbiddenException({

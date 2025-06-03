@@ -45,13 +45,19 @@ export class CattleHealthService {
     if (!cattleH) {
       throw new NotFoundException(`ID ${id} bo‘yicha malumot yoq topilmadi`);
     }
-    const cattle = await this.cattleService.findOne(
-      Number(updateCattleHealthDto.cattle_id)
-    );
+    const { cattle_id, ...rest } = updateCattleHealthDto;
+    if(!cattle_id){
+      await this.cattleHealthRepo.update(id, {
+        ...rest,
+        cattle: cattleH.cattle,
+      });
+      return this.cattleHealthRepo.findOneBy({ id });
+    }
+
+    const cattle = await this.cattleService.findOne(Number(cattle_id));
     if (!cattle) {
       throw new NotFoundException("Bunaqa Idli cattle topilmadi");
     }
-    const { cattle_id, ...rest } = updateCattleHealthDto;
 
     await this.cattleHealthRepo.update(id, {
       ...rest,

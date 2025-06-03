@@ -19,7 +19,8 @@ export class ExpensesService {
   ) {}
   async create(createExpenseDto: CreateExpenseDto) {
     const cattle = await this.cattleService.findOne(
-      Number(createExpenseDto.cattle_id));
+      Number(createExpenseDto.cattle_id)
+    );
     if (!cattle) {
       throw new NotFoundException("Bunaqa CattleId yoq");
     }
@@ -50,6 +51,14 @@ export class ExpensesService {
     }
 
     const { cattle_id, ...rest } = updateExpenseDto;
+    if (!cattle_id) {
+      await this.expensesRepo.update(id, {
+        ...rest,
+        cattle: cattleRecord.cattle,
+      });
+
+      return this.expensesRepo.findOneBy({ id });
+    }
     const cattle = await this.cattleService.findOne(Number(cattle_id));
     if (!cattle) {
       throw new BadRequestException("Yangilamoqchi bo'lgan mol mavjud emas");

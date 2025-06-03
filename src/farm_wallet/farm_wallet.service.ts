@@ -22,6 +22,10 @@ export class FarmWalletService {
   }
 
   async update(id: number, updateFarmWalletDto: UpdateFarmWalletDto) {
+    const inven = await this.farmWalletRepo.findOneBy({ id });
+    if (!inven) {
+      throw new NotFoundException("Bunaqa iDli Farm_wallet yoq");
+    }
     await this.farmWalletRepo.update(id,updateFarmWalletDto)
     return this.farmWalletRepo.findOneBy({id})
   }

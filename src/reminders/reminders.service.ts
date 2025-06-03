@@ -50,13 +50,22 @@ export class RemindersService {
       throw new NotFoundException(`ID ${id} bo‘yicha ma'lumot topilmadi`);
     }
     const { cattle_id, ...rest } = updateReminderDto;
+    if (!cattle_id) {
+      await this.reminderRepo.update(id, {
+        ...rest,
+        cattle: cattleRemindor.cattle,
+      });
+
+      return this.reminderRepo.findOneBy({ id });
+    }
+
     const cattle = await this.cattleService.findOne(Number(cattle_id));
     if (!cattle) {
       throw new BadRequestException("Yangilamoqchi bo'lgan mol mavjud emas");
     }
     await this.reminderRepo.update(id, {
       ...rest,
-      cattle: cattle,
+      cattle,
     });
 
     return this.reminderRepo.findOneBy({ id });

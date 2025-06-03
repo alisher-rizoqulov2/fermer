@@ -27,6 +27,7 @@ export class AuthService {
       is_active: admin.is_active,
       is_creator: admin.is_creator,
       email: admin.email,
+      role:"admin"
     };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -248,7 +249,7 @@ export class AuthService {
     if (!updatedUser.is_active) {
       throw new BadRequestException({ message: "User already activated" });
     }
-    
+
     return {
       message: "User Activated Successfully",
       is_active: updatedUser.is_active,

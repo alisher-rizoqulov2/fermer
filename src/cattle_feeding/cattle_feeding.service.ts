@@ -46,15 +46,23 @@ export class CattleFeedingService {
     if (!cattlef) {
       throw new NotFoundException(`ID ${id} bo‘yicha ma'lumot topilmadi`);
     }
+    const { cattle_id, ...rest } = updateCattleFeedingDto;
+    if (!cattle_id) {
+      await this.cattleFeedingRepo.update(id, {
+        ...rest,
+        cattle: cattlef.cattle,
+      });
 
-    const cattle = await this.cattleService.findOne(Number(updateCattleFeedingDto.cattle_id));
+      return this.cattleFeedingRepo.findOneBy({ id });
+    }
+
+    const cattle = await this.cattleService.findOne(cattle_id!);
 
     if (!cattle) {
       throw new BadRequestException(
         "Yangilamoqchi bo'lgan molingiz mavjud emas"
       );
     }
-    const { cattle_id, ...rest } = updateCattleFeedingDto;
     await this.cattleFeedingRepo.update(id, {
       ...rest,
       cattle: cattle,

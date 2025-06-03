@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateCattleProfitLossDto } from "./dto/create-cattle_profit_loss.dto";
 import { UpdateCattleProfitLossDto } from "./dto/update-cattle_profit_loss.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -50,6 +54,14 @@ export class CattleProfitLossService {
     }
 
     const { cattle_id, ...rest } = updateCattleProfitLossDto;
+    if (!cattle_id) {
+      await this.cattleProfitLossRepo.update(id, {
+        ...rest,
+        cattle: cattleRecord.cattle,
+      });
+
+      return this.cattleProfitLossRepo.findOneBy({ id });
+    }
     const cattle = await this.cattleService.findOne(Number(cattle_id));
     if (!cattle) {
       throw new BadRequestException("Yangilamoqchi bo'lgan mol mavjud emas");
