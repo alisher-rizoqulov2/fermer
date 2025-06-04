@@ -13,6 +13,8 @@ import { ReportsService } from "./reports.service";
 import { CreateReportDto } from "./dto/create-report.dto";
 import { UpdateReportDto } from "./dto/update-report.dto";
 import { authGuard } from "../common/guard/auth.guard";
+import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
+import { userSelfGuard } from "../common/guard/userSelf.guard";
 
 @ApiTags("Reports")
 @Controller("reports")
@@ -20,6 +22,7 @@ export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Post()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi hisobot yaratish" })
   create(@Body() createReportDto: CreateReportDto) {
@@ -27,6 +30,7 @@ export class ReportsController {
   }
 
   @Get()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha hisobotlarni olish" })
   findAll() {
@@ -34,6 +38,7 @@ export class ReportsController {
   }
 
   @Get(":id")
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali hisobotni olish" })
   findOne(@Param("id") id: string) {
@@ -41,6 +46,7 @@ export class ReportsController {
   }
 
   @Patch(":id")
+  @UseGuards(UserBuxalterGuard, userSelfGuard, UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Hisobotni yangilash" })
   update(@Param("id") id: string, @Body() updateReportDto: UpdateReportDto) {
@@ -48,7 +54,8 @@ export class ReportsController {
   }
 
   @Delete(":id")
-  @UseGuards(authGuard)
+  @UseGuards()
+  @UseGuards(authGuard, userSelfGuard, UserBuxalterGuard)
   @ApiOperation({ summary: "Hisobotni o‘chirish" })
   remove(@Param("id") id: string) {
     return this.reportsService.remove(+id);

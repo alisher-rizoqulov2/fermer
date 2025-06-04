@@ -8,11 +8,12 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { ExpensesService } from "./expenses.service";
 import { CreateExpenseDto } from "./dto/create-expense.dto";
 import { UpdateExpenseDto } from "./dto/update-expense.dto";
 import { authGuard } from "../common/guard/auth.guard";
+import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
 
 @ApiTags("Expenses")
 @Controller("expenses")
@@ -20,6 +21,7 @@ export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Post()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi xarajat qo‘shish" })
   create(@Body() createExpenseDto: CreateExpenseDto) {
@@ -27,13 +29,23 @@ export class ExpensesController {
   }
 
   @Get()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha xarajatlarni olish" })
   findAll() {
     return this.expensesService.findAll();
   }
 
+  @Get("total/:id")
+  @UseGuards(UserBuxalterGuard)
+  @UseGuards(authGuard)
+  @ApiOperation({ summary: "Mol uchun jami xarajatni hisoblash" })
+  findTotalExpense(@Param("id") id: number) {
+    return this.expensesService.findTotalExpense(+id);
+  }
+
   @Get(":id")
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali xarajatni olish" })
   findOne(@Param("id") id: string) {
@@ -41,6 +53,7 @@ export class ExpensesController {
   }
 
   @Patch(":id")
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Xarajatni yangilash" })
   update(@Param("id") id: string, @Body() updateExpenseDto: UpdateExpenseDto) {
@@ -48,6 +61,7 @@ export class ExpensesController {
   }
 
   @Delete(":id")
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Xarajatni o‘chirish" })
   remove(@Param("id") id: string) {

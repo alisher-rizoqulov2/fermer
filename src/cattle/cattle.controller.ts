@@ -13,6 +13,8 @@ import { CreateCattleDto } from "./dto/create-cattle.dto";
 import { UpdateCattleDto } from "./dto/update-cattle.dto";
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
 import { authGuard } from "../common/guard/auth.guard";
+import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
+import { creatorGuard } from "../common/guard/admin_creator.guard";
 
 @ApiTags("Cattle") // Swagger UI’da guruh nomi
 @Controller("cattle")
@@ -20,6 +22,7 @@ export class CattleController {
   constructor(private readonly cattleService: CattleService) {}
 
   @Post()
+  @UseGuards(creatorGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi mol qo‘shish" })
   create(@Body() createCattleDto: CreateCattleDto) {
@@ -27,6 +30,7 @@ export class CattleController {
   }
 
   @Get()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha mollarni olish" })
   findAll() {
@@ -34,6 +38,7 @@ export class CattleController {
   }
 
   @Get(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali bitta molni olish" })
   findOne(@Param("id") id: string) {
@@ -41,6 +46,7 @@ export class CattleController {
   }
 
   @Patch(":id")
+  @UseGuards(creatorGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Mol ma’lumotini yangilash" })
   update(@Param("id") id: string, @Body() updateCattleDto: UpdateCattleDto) {
@@ -48,6 +54,7 @@ export class CattleController {
   }
 
   @Delete(":id")
+  @UseGuards(creatorGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Molni o‘chirish" })
   remove(@Param("id") id: string) {

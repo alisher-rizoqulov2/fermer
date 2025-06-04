@@ -15,7 +15,7 @@ import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { Admin } from "./entities/admin.entity";
 import { authGuard } from "../common/guard/auth.guard";
 import { creatorGuard } from "../common/guard/admin_creator.guard";
-import { selfguard } from "../common/guard/auth_self.guard";
+import { userSelfGuard } from "../common/guard/userSelf.guard";
 
 @ApiTags("Admin") // Swagger bo‘lim nomi
 @Controller("admin")
@@ -42,7 +42,7 @@ export class AdminController {
   }
 
   @Get(":id")
-  @UseGuards(selfguard)
+  @UseGuards(userSelfGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali bitta adminni olish" })
   @ApiParam({ name: "id", example: 1, description: "Admin ID raqami" })
@@ -53,7 +53,7 @@ export class AdminController {
   }
 
   @Patch(":id")
-  @UseGuards(selfguard)
+  @UseGuards(userSelfGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Admin maʼlumotlarini yangilash" })
   @ApiParam({ name: "id", example: 1, description: "Admin ID raqami" })
@@ -64,7 +64,7 @@ export class AdminController {
   }
 
   @Delete(":id")
-  @UseGuards(creatorGuard)
+  @UseGuards(userSelfGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Adminni o‘chirish" })
   @ApiParam({ name: "id", example: 1, description: "Admin ID raqami" })

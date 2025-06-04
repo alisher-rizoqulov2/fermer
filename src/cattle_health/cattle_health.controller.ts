@@ -14,6 +14,7 @@ import { CreateCattleHealthDto } from "./dto/create-cattle_health.dto";
 import { UpdateCattleHealthDto } from "./dto/update-cattle_health.dto";
 import { CattleHealth } from "./entities/cattle_health.entity";
 import { authGuard } from "../common/guard/auth.guard";
+import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("cattle-health")
 @Controller("cattle-health")
@@ -21,6 +22,7 @@ export class CattleHealthController {
   constructor(private readonly cattleHealthService: CattleHealthService) {}
 
   @Post()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Create a new cattle health record" })
   @ApiResponse({
@@ -33,6 +35,7 @@ export class CattleHealthController {
   }
 
   @Get()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Get all cattle health records" })
   @ApiResponse({
@@ -45,6 +48,7 @@ export class CattleHealthController {
   }
 
   @Get(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Get a cattle health record by ID" })
   @ApiParam({
@@ -63,6 +67,7 @@ export class CattleHealthController {
   }
 
   @Patch(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Update a cattle health record by ID" })
   @ApiParam({
@@ -84,6 +89,7 @@ export class CattleHealthController {
   }
 
   @Delete(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Delete a cattle health record by ID" })
   @ApiParam({

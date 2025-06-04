@@ -2,9 +2,11 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Notification } from "../../notifications/entities/notification.entity";
 import { v4 as uuidv4 } from "uuid";
+import { WorkerTask } from "../../worker_tasks/entities/worker_task.entity";
 export enum UserRole {
   ISHCHI = "ishchi",
   VIT = "vit",
+  Buxgalter = "Buxgalter",
 }
 
 @Entity()
@@ -88,4 +90,7 @@ export class User {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
+  @OneToMany(() => WorkerTask, (task) => task.user)
+  workerTasks: WorkerTask[];
 }
+

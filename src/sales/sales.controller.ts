@@ -13,6 +13,8 @@ import { SalesService } from "./sales.service";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 import { UpdateSaleDto } from "./dto/update-sale.dto";
 import { authGuard } from "../common/guard/auth.guard";
+import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
+import { userSelfGuard } from "../common/guard/userSelf.guard";
 
 @ApiTags("Sales")
 @Controller("sales")
@@ -20,6 +22,7 @@ export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Post()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi sotuv qo‘shish" })
   create(@Body() createSaleDto: CreateSaleDto) {
@@ -27,6 +30,7 @@ export class SalesController {
   }
 
   @Get()
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha sotuvlarni olish" })
   findAll() {
@@ -34,6 +38,7 @@ export class SalesController {
   }
 
   @Get(":id")
+  @UseGuards(UserBuxalterGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali sotuvni olish" })
   findOne(@Param("id") id: string) {
@@ -41,14 +46,14 @@ export class SalesController {
   }
 
   @Patch(":id")
-  @UseGuards(authGuard)
+  @UseGuards(authGuard, userSelfGuard, UserBuxalterGuard)
   @ApiOperation({ summary: "Sotuvni yangilash" })
   update(@Param("id") id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(+id, updateSaleDto);
   }
 
   @Delete(":id")
-  @UseGuards(authGuard)
+  @UseGuards(authGuard, userSelfGuard, UserBuxalterGuard)
   @ApiOperation({ summary: "Sotuvni o‘chirish" })
   remove(@Param("id") id: string) {
     return this.salesService.remove(+id);

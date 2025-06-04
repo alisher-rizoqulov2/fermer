@@ -49,7 +49,14 @@ export class NotificationsService {
     return this.notificationRepo.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} notification`;
+  async remove(id: number) {
+    const task = await this.notificationRepo.findOneBy({ id });
+    if (!task) {
+      throw new NotFoundException(`ID si ${id} bo'lgan workerTask topilmadi`);
+    }
+    await this.notificationRepo.remove(task);
+    return {
+      message: `ID si ${id} bo'lgan workerTask muvaffaqiyatli o'chirildi`,
+    };
   }
 }

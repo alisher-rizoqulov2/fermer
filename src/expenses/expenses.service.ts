@@ -36,6 +36,25 @@ export class ExpensesService {
       relations: ["cattle"],
     });
   }
+  async findTotalExpense(id: number) {
+    const cattle = await this.cattleService.findOne(id);
+    if (!cattle) {
+      throw new NotFoundException(`ID ${id} ga teng mol topilmadi`);
+    }
+
+    const expenses = await this.expensesRepo.find({
+      where: { cattle: { id } },
+    });
+
+    const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+    return {
+      cattle_id: id,
+      total_expense: total,
+      currency: "UZS", 
+      expense_count: expenses.length,
+    };
+  }
 
   findOne(id: number) {
     return this.expensesRepo.findOne({

@@ -13,6 +13,7 @@ import { CreateCattleFeedingDto } from "./dto/create-cattle_feeding.dto";
 import { UpdateCattleFeedingDto } from "./dto/update-cattle_feeding.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { authGuard } from "../common/guard/auth.guard";
+import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("Cattle Feeding")
 @Controller("cattle-feeding")
@@ -20,6 +21,7 @@ export class CattleFeedingController {
   constructor(private readonly cattleFeedingService: CattleFeedingService) {}
 
   @Post()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi yemlanish yozuvini yaratish" })
   create(@Body() createCattleFeedingDto: CreateCattleFeedingDto) {
@@ -27,6 +29,7 @@ export class CattleFeedingController {
   }
 
   @Get()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha yemlanish yozuvlarini olish" })
   findAll() {
@@ -34,6 +37,7 @@ export class CattleFeedingController {
   }
 
   @Get(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali bitta yozuvni olish" })
   findOne(@Param("id") id: string) {
@@ -41,6 +45,7 @@ export class CattleFeedingController {
   }
 
   @Patch(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yemlanish yozuvini yangilash" })
   update(
@@ -51,6 +56,7 @@ export class CattleFeedingController {
   }
 
   @Delete(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yemlanish yozuvini o‘chirish" })
   remove(@Param("id") id: string) {

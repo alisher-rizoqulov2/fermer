@@ -15,6 +15,7 @@ import { FarmWalletModule } from './farm_wallet/farm_wallet.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ReportsModule } from './reports/reports.module';
 import { CattleProfitLossModule } from './cattle_profit_loss/cattle_profit_loss.module';
+import { WorkerTasksModule } from './worker_tasks/worker_tasks.module';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { CattleProfitLossModule } from './cattle_profit_loss/cattle_profit_loss.
     FarmWalletModule,
     InventoryModule,
     ReportsModule,
-    CattleProfitLossModule
+    CattleProfitLossModule,
+    WorkerTasksModule
   ],
   controllers: [],
   providers: [],

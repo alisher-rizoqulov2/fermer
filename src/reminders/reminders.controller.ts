@@ -13,6 +13,7 @@ import { RemindersService } from "./reminders.service";
 import { CreateReminderDto } from "./dto/create-reminder.dto";
 import { UpdateReminderDto } from "./dto/update-reminder.dto";
 import { authGuard } from "../common/guard/auth.guard";
+import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("Reminders")
 @Controller("reminders")
@@ -20,6 +21,7 @@ export class RemindersController {
   constructor(private readonly remindersService: RemindersService) {}
 
   @Post()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi eslatma yaratish" })
   create(@Body() createReminderDto: CreateReminderDto) {
@@ -27,6 +29,7 @@ export class RemindersController {
   }
 
   @Get()
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Barcha eslatmalarni olish" })
   findAll() {
@@ -34,6 +37,7 @@ export class RemindersController {
   }
 
   @Get(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "ID orqali eslatmani olish" })
   findOne(@Param("id") id: string) {
@@ -41,6 +45,7 @@ export class RemindersController {
   }
 
   @Patch(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Eslatmani yangilash" })
   update(
@@ -51,6 +56,7 @@ export class RemindersController {
   }
 
   @Delete(":id")
+  @UseGuards(chorvaOziqlanishGuard)
   @UseGuards(authGuard)
   @ApiOperation({ summary: "Eslatmani o‘chirish" })
   remove(@Param("id") id: string) {
