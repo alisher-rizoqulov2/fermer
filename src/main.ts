@@ -39,6 +39,7 @@ async function start() {
     app.enableCors({
       origin: (origin, callback) => {
         const allowedOrigins = [
+          "http://13.203.128.82:3000",
           "http://localhost:3000",
           "https://Fermer.uz",
           "https://admin.Fermer.uz",
