@@ -36,9 +36,11 @@ async function start() {
       .build();
 
       app.enableCors({
-        origin: true,
-        credentials: true,
+        origin: true, // har qanday originni qabul qiladi va u originni response ga qo'yadi
+        credentials: true, // cookie va header uchun ruxsat beradi
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       });
+      
       
 
     const document = SwaggerModule.createDocument(app, config);
