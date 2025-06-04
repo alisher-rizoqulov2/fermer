@@ -36,10 +36,9 @@ async function start() {
       .build();
 
       app.enableCors({
-        origin: "*", // barchaga ruxsat
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        origin: true,
+        credentials: true,
       });
-      
       
 
     const document = SwaggerModule.createDocument(app, config);
