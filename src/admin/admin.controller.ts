@@ -30,8 +30,8 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
-  @UseGuards(creatorGuard)
-  @UseGuards(authGuard)
+  // @UseGuards(creatorGuard)
+  // @UseGuards(authGuard)
   @ApiOperation({ summary: "Yangi admin yaratish" })
   @ApiResponse({ status: 201, description: "Admin yaratildi", type: Admin })
   @ApiResponse({ status: 400, description: "Xatolik: Yaroqsiz maʼlumot" })
