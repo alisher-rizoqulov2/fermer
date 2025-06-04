@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { CattleHealthService } from "./cattle_health.service";
 import { CreateCattleHealthDto } from "./dto/create-cattle_health.dto";
 import { UpdateCattleHealthDto } from "./dto/update-cattle_health.dto";
@@ -17,6 +17,8 @@ import { authGuard } from "../common/guard/auth.guard";
 import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("cattle-health")
+@ApiBearerAuth("accessToken")
+
 @Controller("cattle-health")
 export class CattleHealthController {
   constructor(private readonly cattleHealthService: CattleHealthService) {}

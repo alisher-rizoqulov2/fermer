@@ -24,7 +24,16 @@ async function start() {
       .setDescription("Fermer REST API")
       .setVersion("1.0")
       .addTag("NestJs,swagger,sendMail,bot,SMS,tokens,Validation,Typorem")
-      .addBearerAuth()
+      .addBearerAuth(
+        {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          name: "Authorization",
+          in: "header",
+        },
+        "accessToken" // security name
+      )
       .build();
 
     app.enableCors({

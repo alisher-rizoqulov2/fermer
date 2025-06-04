@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 import { ExpensesService } from "./expenses.service";
 import { CreateExpenseDto } from "./dto/create-expense.dto";
 import { UpdateExpenseDto } from "./dto/update-expense.dto";
@@ -16,6 +16,8 @@ import { authGuard } from "../common/guard/auth.guard";
 import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
 
 @ApiTags("Expenses")
+@ApiBearerAuth("accessToken")
+
 @Controller("expenses")
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}

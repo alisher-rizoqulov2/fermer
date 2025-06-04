@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { RemindersService } from "./reminders.service";
 import { CreateReminderDto } from "./dto/create-reminder.dto";
 import { UpdateReminderDto } from "./dto/update-reminder.dto";
@@ -16,6 +16,8 @@ import { authGuard } from "../common/guard/auth.guard";
 import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("Reminders")
+@ApiBearerAuth("accessToken")
+
 @Controller("reminders")
 export class RemindersController {
   constructor(private readonly remindersService: RemindersService) {}

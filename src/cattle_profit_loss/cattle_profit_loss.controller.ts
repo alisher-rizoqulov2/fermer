@@ -8,13 +8,14 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CattleProfitLossService } from "./cattle_profit_loss.service";
 import { CreateCattleProfitLossDto } from "./dto/create-cattle_profit_loss.dto";
 import { UpdateCattleProfitLossDto } from "./dto/update-cattle_profit_loss.dto";
 import { authGuard } from "../common/guard/auth.guard";
 
 @ApiTags("cattle-profit-loss")
+@ApiBearerAuth("accessToken")
 @Controller("cattle-profit-loss")
 export class CattleProfitLossController {
   constructor(

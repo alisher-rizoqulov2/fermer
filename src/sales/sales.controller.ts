@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { SalesService } from "./sales.service";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 import { UpdateSaleDto } from "./dto/update-sale.dto";
@@ -17,6 +17,8 @@ import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
 import { userSelfGuard } from "../common/guard/userSelf.guard";
 
 @ApiTags("Sales")
+@ApiBearerAuth("accessToken")
+
 @Controller("sales")
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}

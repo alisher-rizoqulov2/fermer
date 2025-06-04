@@ -11,11 +11,13 @@ import {
 import { CattleFeedingService } from "./cattle_feeding.service";
 import { CreateCattleFeedingDto } from "./dto/create-cattle_feeding.dto";
 import { UpdateCattleFeedingDto } from "./dto/update-cattle_feeding.dto";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { authGuard } from "../common/guard/auth.guard";
 import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 
 @ApiTags("Cattle Feeding")
+@ApiBearerAuth("accessToken")
+
 @Controller("cattle-feeding")
 export class CattleFeedingController {
   constructor(private readonly cattleFeedingService: CattleFeedingService) {}

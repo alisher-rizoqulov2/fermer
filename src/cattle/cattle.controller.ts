@@ -11,12 +11,14 @@ import {
 import { CattleService } from "./cattle.service";
 import { CreateCattleDto } from "./dto/create-cattle.dto";
 import { UpdateCattleDto } from "./dto/update-cattle.dto";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { authGuard } from "../common/guard/auth.guard";
 import { chorvaOziqlanishGuard } from "../common/guard/chorvaoziqlanish.guard";
 import { creatorGuard } from "../common/guard/admin_creator.guard";
 
-@ApiTags("Cattle") // Swagger UI’da guruh nomi
+@ApiTags("Cattle") 
+@ApiBearerAuth("accessToken")
+
 @Controller("cattle")
 export class CattleController {
   constructor(private readonly cattleService: CattleService) {}

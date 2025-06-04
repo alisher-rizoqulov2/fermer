@@ -8,13 +8,14 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { InventoryService } from "./inventory.service";
 import { CreateInventoryDto } from "./dto/create-inventory.dto";
 import { UpdateInventoryDto } from "./dto/update-inventory.dto";
 import { authGuard } from "../common/guard/auth.guard";
 
 @ApiTags("Inventory")
+@ApiBearerAuth("accessToken")
 @Controller("inventory")
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}

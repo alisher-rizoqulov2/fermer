@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { FarmWalletService } from "./farm_wallet.service";
 import { CreateFarmWalletDto } from "./dto/create-farm_wallet.dto";
 import { UpdateFarmWalletDto } from "./dto/update-farm_wallet.dto";
@@ -16,6 +16,8 @@ import { authGuard } from "../common/guard/auth.guard";
 import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
 
 @ApiTags("FarmWallet")
+@ApiBearerAuth("accessToken")
+
 @Controller("farm-wallet")
 export class FarmWalletController {
   constructor(private readonly farmWalletService: FarmWalletService) {}

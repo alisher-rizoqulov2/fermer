@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBearerAuth } from "@nestjs/swagger";
 import { ReportsService } from "./reports.service";
 import { CreateReportDto } from "./dto/create-report.dto";
 import { UpdateReportDto } from "./dto/update-report.dto";
@@ -17,6 +17,8 @@ import { UserBuxalterGuard } from "../common/guard/userBuxalter.guard";
 import { userSelfGuard } from "../common/guard/userSelf.guard";
 
 @ApiTags("Reports")
+@ApiBearerAuth("accessToken")
+
 @Controller("reports")
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}

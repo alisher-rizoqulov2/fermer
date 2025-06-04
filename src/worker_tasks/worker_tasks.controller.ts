@@ -17,12 +17,15 @@ import {
   ApiResponse,
   ApiParam,
   ApiBody,
+  ApiBearerAuth,
 } from "@nestjs/swagger";
 import { adminGuard } from "../common/guard/admin.guard";
 import { authGuard } from "../common/guard/auth.guard";
 import { userIschiGuard } from "../common/guard/userIshchi.guard";
 
 @ApiTags("worker-tasks")
+@ApiBearerAuth("accessToken")
+
 @Controller("worker-tasks")
 export class WorkerTasksController {
   constructor(private readonly workerTasksService: WorkerTasksService) {}
