@@ -7,7 +7,6 @@ import { WinstonModule } from "nest-winston";
 import { WinstonConfig } from "./common/logger/winston.logger";
 import { AllExceptionsFilter } from "./common/errors/error.handling";
 
-
 async function start() {
   try {
     const PORT = process.env.PORT || 3030;
@@ -36,25 +35,25 @@ async function start() {
       )
       .build();
 
-    // app.enableCors({
-    //   origin: (origin, callback) => {
-    //     const allowedOrigins = [
-    //       "http://13.203.128.82:3000",
-    //       "http://localhost:3000",
-    //       "https://Fermer.uz",
-    //       "https://admin.Fermer.uz",
-    //       "https://Fermer-admin.vercel.app",
-    //       "https://Fermer-ishchi.vercel.app",
-    //     ];
-    //     if (!origin || allowedOrigins.includes(origin)) {
-    //       callback(null, true);
-    //     } else {
-    //       callback(new BadRequestException("Not allowed by CORS"));
-    //     }
-    //   },
-    //   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    //   credentials: true, //cookie va header,
-    // });
+    app.enableCors({
+      origin: (origin, callback) => {
+        const allowedOrigins = [
+          "http://13.203.128.82:3000",
+          "http://localhost:3000",
+          "https://Fermer.uz",
+          "https://admin.Fermer.uz",
+          "https://Fermer-admin.vercel.app",
+          "https://Fermer-ishchi.vercel.app",
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new BadRequestException("Not allowed by CORS"));
+        }
+      },
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      credentials: true, //cookie va header,
+    });
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("api/docs", app, document);
