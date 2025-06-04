@@ -35,11 +35,7 @@ async function start() {
       )
       .build();
 
-      app.enableCors({
-        origin: true,
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        credentials: true,
-      });
+      
       
 
     const document = SwaggerModule.createDocument(app, config);

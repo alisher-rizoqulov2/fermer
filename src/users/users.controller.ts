@@ -23,7 +23,6 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-
   @UseGuards()
   @ApiOperation({ summary: "Yangi foydalanuvchi yaratish" })
   create(@Body() createUserDto: CreateUserDto) {
